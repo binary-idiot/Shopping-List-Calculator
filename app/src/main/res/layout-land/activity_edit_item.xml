@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditItem">
+
+    <TextView
+        android:id="@+id/itemNameEditLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/itemNameEditLabelText"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/itemNameEditText"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/itemAmountEditLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/itemAmountEditLabelText"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/itemNameEditLabel"
+        app:layout_constraintStart_toStartOf="@+id/itemAmountEditText" />
+
+    <TextView
+        android:id="@+id/itemPriceEditLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/itemPriceEditLabelText"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/itemPriceEditText"
+        app:layout_constraintTop_toBottomOf="@+id/itemAmountEditText" />
+
+    <Button
+        android:id="@+id/updateItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/updateItemButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/cancelItemButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/includeItemInTotalCheckBox" />
+
+    <Button
+        android:id="@+id/cancelItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancelItemButton"
+        app:layout_constraintBottom_toBottomOf="@+id/updateItemButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/updateItemButton" />
+
+    <EditText
+        android:id="@+id/itemNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="@string/itemNameExitTextHint"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemNameEditLabel" />
+
+    <EditText
+        android:id="@+id/itemAmountEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/itemAmountEditTextHint"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="@+id/itemNameEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemNameEditText" />
+
+    <EditText
+        android:id="@+id/itemPriceEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="@string/itemPriceEditTextHint"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toStartOf="@+id/itemAmountEditText"
+        app:layout_constraintTop_toBottomOf="@+id/itemPriceEditLabel" />
+
+    <CheckBox
+        android:id="@+id/calculatePerAmountCheckBox"
+        android:layout_width="332dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/calculatePerAmountCheckBoxLabel"
+        app:layout_constraintEnd_toStartOf="@+id/itemPriceEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemNameEditText" />
+
+    <CheckBox
+        android:id="@+id/includeItemInTotalCheckBox"
+        android:layout_width="332dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/includeItemInTotalCheckBoxLabel"
+        app:layout_constraintStart_toStartOf="@+id/calculatePerAmountCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/calculatePerAmountCheckBox" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
