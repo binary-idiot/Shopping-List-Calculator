@@ -2,9 +2,15 @@ package com.jonahmiddleton.shoppinglistcalculator;
 
 import android.provider.BaseColumns;
 
-public class DataContract {
+/**
+ * Contract of the schema for the database
+ */
+public final class DataContract {
     private DataContract() {}
 
+    /**
+     * schema for the item table
+     */
     public static class ItemEntry implements BaseColumns {
         public static final String TABLE_NAME = "item";
         public static final String COLUMN_NAME_ITEMNAME = "name";
