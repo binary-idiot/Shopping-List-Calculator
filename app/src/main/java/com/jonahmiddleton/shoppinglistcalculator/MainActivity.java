@@ -1,6 +1,7 @@
 package com.jonahmiddleton.shoppinglistcalculator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -10,6 +11,9 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Activity displays the list of items, their total price, and a button to add more to the list
  */
@@ -18,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView shoppingListView;
     TextView calculatedTotalView;
     FloatingActionButton addItemButton;
+
+    DBHelper dbHelper;
+    List<Item> items;
 
     /**
      * Key for the item to edit in intent extras
@@ -33,12 +40,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dbHelper = new DBHelper(this);
+        items = new ArrayList<Item>();
+
         shoppingListView = (RecyclerView)findViewById(R.id.shoppingListView);
         calculatedTotalView = (TextView)findViewById(R.id.calculatedTotalView);
         addItemButton = (FloatingActionButton)findViewById(R.id.addItemButton);
 
         addItemButton.setOnClickListener(new AddItemListener());
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        items.clear();
+        items.addAll(ItemData.getItems(dbHelper, DataContract.ItemEntry.COLUMN_NAME_ITEMNAME, false));
+
+        RecyclerView.Adapter adapter = shoppingListView.getAdapter();
+        if(adapter != null){
+            adapter.notifyDataSetChanged();
+        } else {
+            shoppingListView.setAdapter(new ListItemAdapter(items));
+            shoppingListView.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
 
     /**

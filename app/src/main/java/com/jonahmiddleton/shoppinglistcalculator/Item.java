@@ -39,7 +39,7 @@ public class Item implements Parcelable {
      * Create default new item
      */
     public Item(){
-        this(NO_ID, "", 0, 0, true, false);
+        this(NO_ID, "", 0, 0, false, true);
     }
 
     /**

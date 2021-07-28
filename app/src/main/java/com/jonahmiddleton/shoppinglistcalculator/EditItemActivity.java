@@ -106,8 +106,8 @@ public class EditItemActivity extends AppCompatActivity {
             String priceAmtStr = itemPriceEditText.getText().toString()
                     .replace(Currency.getInstance(Locale.getDefault()).getSymbol(), "");
             double price = numberFormat.parse(priceAmtStr).doubleValue();
-            boolean calculated = calculatePerAmountCheckBox.isChecked();
-            boolean perUnit = includeItemInTotalCheckBox.isChecked();
+            boolean calculated = includeItemInTotalCheckBox.isChecked();
+            boolean perUnit = calculatePerAmountCheckBox.isChecked();
 
             currentItem.setName(name);
             currentItem.setAmount(amount);
@@ -132,8 +132,8 @@ public class EditItemActivity extends AppCompatActivity {
         itemAmountEditText.setText(decimal.format(currentItem.getAmount()));
         itemPriceEditText.setText(currency.format(currentItem.getPrice()));
 
-        calculatePerAmountCheckBox.setChecked(currentItem.isCalculated());
-        includeItemInTotalCheckBox.setChecked(currentItem.isPricePerUnit());
+        calculatePerAmountCheckBox.setChecked(currentItem.isPricePerUnit());
+        includeItemInTotalCheckBox.setChecked(currentItem.isCalculated());
     }
 
     /**
