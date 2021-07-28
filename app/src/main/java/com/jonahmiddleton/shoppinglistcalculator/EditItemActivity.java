@@ -1,8 +1,10 @@
 package com.jonahmiddleton.shoppinglistcalculator;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -72,7 +74,7 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     /**
-     * Handle action bar back button
+     * Handle action bar home
      * @param item
      * @return
      */
@@ -82,6 +84,14 @@ public class EditItemActivity extends AppCompatActivity {
             confirmCancel();
         }
         return true;
+    }
+
+    /**
+     * Handle back button
+     */
+    @Override
+    public void onBackPressed() {
+        confirmCancel();
     }
 
     /**
@@ -142,7 +152,17 @@ public class EditItemActivity extends AppCompatActivity {
      * Display dialog to confirm cancel edit
      */
     private void confirmCancel(){
-        finish();
+        new AlertDialog.Builder(this)
+                .setTitle("Cancel")
+                .setMessage("Are you sure you want to cancel editing this item?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     /**
