@@ -86,8 +86,22 @@ public class ItemData {
                     values,
                     ItemEntry._ID + " = ?",
                     new String[]{Integer.toString(item.getId())}
-            ) == 0;
+            ) == 1;
         }
+    }
+
+    /**
+     * Delete an item from the database
+     * @param dbHelper
+     * @param item item to delete from the database
+     * @return if the item was successfully deleted or not
+     */
+    public static boolean deleteItem(DBHelper dbHelper, Item item){
+        return dbHelper.getWritableDatabase().delete(
+                ItemEntry.TABLE_NAME,
+                ItemEntry._ID + " = ?",
+                new String[]{Integer.toString(item.getId())}
+        ) == 1;
     }
 
     /**

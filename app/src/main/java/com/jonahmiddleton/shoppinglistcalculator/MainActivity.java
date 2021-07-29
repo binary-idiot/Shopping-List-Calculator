@@ -11,13 +11,14 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Activity displays the list of items, their total price, and a button to add more to the list
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterCallBack {
 
     RecyclerView shoppingListView;
     TextView calculatedTotalView;
@@ -62,9 +63,36 @@ public class MainActivity extends AppCompatActivity {
         if(adapter != null){
             adapter.notifyDataSetChanged();
         } else {
-            shoppingListView.setAdapter(new ListItemAdapter(items));
+            shoppingListView.setAdapter(new ListItemAdapter(this, items, dbHelper));
             shoppingListView.setLayoutManager(new LinearLayoutManager(this));
         }
+
+        calculateTotal();
+    }
+
+    private void calculateTotal(){
+        NumberFormat currency = NumberFormat.getCurrencyInstance();
+
+        double total = 0;
+        for(Item item : items){
+            if(item.isCalculated()){
+                double itemPrice = ((item.isPricePerUnit())? item.getAmount() : 1) * item.getPrice();
+                total += itemPrice;
+            }
+        }
+
+        calculatedTotalView.setText(currency.format(total));
+    }
+
+    @Override
+    public void onCallback() {
+        calculateTotal();
+    }
+
+    @Override
+    protected void onDestroy() {
+        dbHelper.close();
+        super.onDestroy();
     }
 
     /**

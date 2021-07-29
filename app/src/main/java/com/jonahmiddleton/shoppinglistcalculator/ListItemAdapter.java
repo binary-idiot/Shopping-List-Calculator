@@ -1,10 +1,16 @@
 package com.jonahmiddleton.shoppinglistcalculator;
 
+import android.content.Context;
+import android.content.Intent;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,12 +19,18 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
+import static com.jonahmiddleton.shoppinglistcalculator.MainActivity.ITEM_TO_EDIT;
+
 public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHolder> {
 
-    private List<Item> items;
+    private final List<Item> items;
+    private Context context;
+    private DBHelper dbHelper;
 
-    public ListItemAdapter(List<Item> itemsList){
-        this.items = itemsList;
+    public ListItemAdapter(Context context, List<Item> itemList, DBHelper dbHelper){
+        this.items = itemList;
+        this.context = context;
+        this.dbHelper = dbHelper;
     }
 
     @NonNull
@@ -26,8 +38,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View listItemView = inflater.inflate(R.layout.layout_list_item, parent, false);
-        ViewHolder holder = new ViewHolder(listItemView);
-        return holder;
+        return new ViewHolder(listItemView);
     }
 
     @Override
@@ -46,6 +57,10 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
         holder.totalItemPriceView.setText(currency.format(itemTotalPrice));
         holder.includeListItemInTotalCHeckBox.setChecked(item.isCalculated());
 
+        ItemListener listener = new ItemListener(item, position, context);
+        holder.includeListItemInTotalCHeckBox.setOnClickListener(listener);
+        holder.itemView.setOnCreateContextMenuListener(listener);
+
     }
 
     @Override
@@ -53,7 +68,33 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
         return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+
+    public void updateItem(int position, Item item){
+        if(ItemData.saveItem(dbHelper, item)){
+            items.set(position, item);
+            this.notifyItemChanged(position);
+            try{
+                AdapterCallBack callBack = (AdapterCallBack)context;
+                callBack.onCallback();
+            }catch (Exception ignored){}
+        }
+    }
+
+    public void removeItem(int position){
+        Item item = items.get(position);
+        if(ItemData.deleteItem(dbHelper, item)){
+            items.remove(position);
+            this.notifyItemRemoved(position);
+            try{
+                AdapterCallBack callBack = (AdapterCallBack)context;
+                callBack.onCallback();
+            }catch (Exception ignored){}
+            Toast.makeText(context.getApplicationContext(), item.getName() + " removed from list", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    protected class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView itemNameView;
         public TextView amountPriceView;
@@ -67,6 +108,50 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
             amountPriceView = (TextView)itemView.findViewById(R.id.amountPriceView);
             totalItemPriceView = (TextView)itemView.findViewById(R.id.totalItemPriceView);
             includeListItemInTotalCHeckBox = (CheckBox)itemView.findViewById(R.id.includeListItemInTotalCheckBox);
+        }
+    }
+
+    private class ItemListener implements View.OnClickListener, View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
+
+        private Item item;
+        private int position;
+        private Context context;
+
+        public ItemListener(Item item, int position, Context context){
+            this.item = item;
+            this.position = position;
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            item.setCalculated(!item.isCalculated());
+            ListItemAdapter.this.updateItem(position, item);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            MenuInflater inflater = new MenuInflater(context);
+            inflater.inflate(R.menu.item_menu, menu);
+            menu.findItem(R.id.editMenuItem).setOnMenuItemClickListener(this);
+            menu.findItem(R.id.deleteMenuItem).setOnMenuItemClickListener(this);
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+
+            switch (menuItem.getItemId()){
+                case R.id.editMenuItem:
+                    Intent intent = new Intent(context, EditItemActivity.class);
+                    intent.putExtra(ITEM_TO_EDIT, item);
+                    context.startActivity(intent);
+                    break;
+                case R.id.deleteMenuItem:
+                    ListItemAdapter.this.removeItem(position);
+                    break;
+            }
+
+            return false;
         }
     }
 }
