@@ -16,4 +16,12 @@
     <string name="totalItemPriceText">$0.00</string>
     <string name="editItemMenuTitle">Edit</string>
     <string name="deleteItemMenuTitle">Delete</string>
+    <string name="parseInvalidToastText">Invalid value entered</string>
+    <string name="emptyNameToastText">Name cannot be empty</string>
+    <string name="successfulSaveToastText">\" successfully saved\"</string>
+    <string name="errorSavingToastText">\"Error saving \"</string>
+    <string name="cancelDialogTitleText">Cancel</string>
+    <string name="cancelDialogMessageText">Are you sure you want to cancel editing this item?</string>
+    <string name="yesText">Yes</string>
+    <string name="noText">No</string>
 </resources>

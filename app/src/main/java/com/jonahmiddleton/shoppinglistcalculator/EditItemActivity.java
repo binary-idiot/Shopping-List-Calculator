@@ -109,13 +109,17 @@ public class EditItemActivity extends AppCompatActivity {
             boolean calculated = includeItemInTotalCheckBox.isChecked();
             boolean perUnit = calculatePerAmountCheckBox.isChecked();
 
+            if(price < 0 || amount < 0){
+                throw(new Exception());
+            }
+
             currentItem.setName(name);
             currentItem.setAmount(amount);
             currentItem.setPrice(price);
             currentItem.setCalculated(calculated);
             currentItem.setPricePerUnit(perUnit);
-        }catch (ParseException e){
-            Toast.makeText(getApplicationContext(), "Invalid value entered", Toast.LENGTH_SHORT).show();
+        }catch (Exception e ){
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.parseInvalidToastText), Toast.LENGTH_SHORT).show();
         }
 
         displayItem();
@@ -142,9 +146,21 @@ public class EditItemActivity extends AppCompatActivity {
      * @return if the item was successfully saved
      */
     private boolean saveItem(Item item){
-        DBHelper dbHelper = new DBHelper(this);
-        boolean saved = ItemData.saveItem(dbHelper, item);
-        dbHelper.close();
+        boolean saved;
+        if(item.getName().trim().isEmpty()) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.emptyNameToastText), Toast.LENGTH_LONG).show();
+            saved = false;
+        }else{
+            DBHelper dbHelper = new DBHelper(this);
+            if(ItemData.saveItem(dbHelper, item)){
+                saved = true;
+            }else{
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.errorSavingToastText) + currentItem.getName(), Toast.LENGTH_LONG).show();
+                saved = false;
+            }
+            dbHelper.close();
+        }
+
         return saved;
     }
 
@@ -153,15 +169,15 @@ public class EditItemActivity extends AppCompatActivity {
      */
     private void confirmCancel(){
         new AlertDialog.Builder(this)
-                .setTitle("Cancel")
-                .setMessage("Are you sure you want to cancel editing this item?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setTitle(getResources().getString(R.string.cancelDialogTitleText))
+                .setMessage(getResources().getString(R.string.cancelDialogMessageText))
+                .setPositiveButton(getResources().getString(R.string.yesText), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(getResources().getString(R.string.noText), null)
                 .show();
     }
 
@@ -217,10 +233,8 @@ public class EditItemActivity extends AppCompatActivity {
         public void onClick(View v) {
             if(save){
                 if(saveItem(currentItem)){
-                    Toast.makeText(getApplicationContext(), currentItem.getName() + " successfully saved", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), currentItem.getName() + getResources().getString(R.string.successfulSaveToastText), Toast.LENGTH_LONG).show();
                     finish();
-                }else {
-                    Toast.makeText(getApplicationContext(), "Error saving " + currentItem.getName(), Toast.LENGTH_LONG).show();
                 }
             }else{
                 confirmCancel();

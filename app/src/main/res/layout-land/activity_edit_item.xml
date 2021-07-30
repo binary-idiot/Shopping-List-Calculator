@@ -96,9 +96,9 @@
 
     <CheckBox
         android:id="@+id/calculatePerAmountCheckBox"
-        android:layout_width="332dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/calculatePerAmountCheckBoxLabel"
         app:layout_constraintEnd_toStartOf="@+id/itemPriceEditText"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,9 +106,9 @@
 
     <CheckBox
         android:id="@+id/includeItemInTotalCheckBox"
-        android:layout_width="332dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/includeItemInTotalCheckBoxLabel"
         app:layout_constraintStart_toStartOf="@+id/calculatePerAmountCheckBox"
         app:layout_constraintTop_toBottomOf="@+id/calculatePerAmountCheckBox" />

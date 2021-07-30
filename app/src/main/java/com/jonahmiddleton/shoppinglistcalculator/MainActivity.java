@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements AdapterCallBack {
 
     }
 
+    /**
+     * Set up the items list and recycler upon resume
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -70,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements AdapterCallBack {
         calculateTotal();
     }
 
+    /**
+     * Displace the total price of all calculated items
+     */
     private void calculateTotal(){
         NumberFormat currency = NumberFormat.getCurrencyInstance();
 
@@ -84,11 +90,17 @@ public class MainActivity extends AppCompatActivity implements AdapterCallBack {
         calculatedTotalView.setText(currency.format(total));
     }
 
+    /**
+     * Recalculate total on callback from adapter
+     */
     @Override
     public void onCallback() {
         calculateTotal();
     }
 
+    /**
+     * Clean up resources
+     */
     @Override
     protected void onDestroy() {
         dbHelper.close();
